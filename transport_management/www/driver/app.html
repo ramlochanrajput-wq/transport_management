@@ -1,0 +1,141 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#2563eb">
+<title>Driver App</title>
+<link rel="manifest" href="/driver/manifest.json">
+<style>
+:root{--bg:#f8fafc;--fg:#0f172a;--card:#fff;--bd:#e2e8f0;--pri:#2563eb;--mut:#64748b}
+@media (prefers-color-scheme:dark){:root{--bg:#0f172a;--fg:#f1f5f9;--card:#1e293b;--bd:#334155;--mut:#94a3b8}}
+*{box-sizing:border-box}body{margin:0;font:16px system-ui,sans-serif;background:var(--bg);color:var(--fg)}
+header{background:var(--pri);color:#fff;padding:12px 16px;display:flex;justify-content:space-between;align-items:center}
+main{padding:16px;max-width:560px;margin:auto}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:10px;padding:12px;margin-bottom:12px}
+button{font:inherit;padding:10px 14px;border-radius:8px;border:1px solid var(--bd);background:var(--card);color:var(--fg);margin:4px 4px 0 0}
+button.p{background:var(--pri);color:#fff;border-color:var(--pri)}
+input,select,textarea{font:inherit;width:100%;padding:9px;margin:4px 0 8px;border-radius:8px;border:1px solid var(--bd);background:var(--card);color:var(--fg)}
+.mut{color:var(--mut);font-size:13px}.pill{display:inline-block;padding:2px 8px;border-radius:99px;background:var(--bd);font-size:12px}
+canvas{border:1px solid var(--bd);border-radius:8px;width:100%;height:120px;touch-action:none;background:#fff}
+#net{font-size:12px}
+</style>
+</head>
+<body>
+<header><b>Driver App</b><span id="net"></span></header>
+<main>
+<div class="mut">{{ user_fullname }} &middot; <span id="q">0</span> queued</div>
+<div id="trips"></div>
+<div id="panel"></div>
+</main>
+<script>
+const CSRF = {{ csrf_token | tojson }};
+const $ = (s) => document.querySelector(s);
+const esc = (s) => { const d = document.createElement("div"); d.textContent = s == null ? "" : s; return d.innerHTML; };
+
+// ---------- offline queue (IndexedDB) ----------
+let db;
+const idb = new Promise((res, rej) => { const r = indexedDB.open("tm-driver", 1); r.onupgradeneeded = () => r.result.createObjectStore("q", { autoIncrement: true }); r.onsuccess = () => { db = r.result; res(); }; r.onerror = rej; });
+const tx = (m) => db.transaction("q", m).objectStore("q");
+const qAll = () => new Promise((res) => { const out = []; tx("readonly").openCursor().onsuccess = (e) => { const c = e.target.result; if (c) { out.push({ k: c.key, v: c.value }); c.continue(); } else res(out); }; });
+const qAdd = (v) => new Promise((res) => { tx("readwrite").add(v).onsuccess = res; });
+const qDel = (k) => new Promise((res) => { tx("readwrite").delete(k).onsuccess = res; });
+
+async function upload(blob, name) {
+	const fd = new FormData(); fd.append("file", blob, name); fd.append("is_private", 0);
+	const r = await fetch("/api/method/upload_file", { method: "POST", headers: { "X-Frappe-CSRF-Token": CSRF }, body: fd });
+	if (!r.ok) throw new Error("upload");
+	return (await r.json()).message.file_url;
+}
+async function call(method, args) {
+	const r = await fetch("/api/method/" + method, { method: "POST", headers: { "Content-Type": "application/json", "X-Frappe-CSRF-Token": CSRF }, body: JSON.stringify(args) });
+	if (!r.ok) { let m = "Error"; try { m = JSON.parse((await r.json())._server_messages)[0]; m = JSON.parse(m).message; } catch (e) {} const err = new Error(m); err.server = r.status < 500 && r.status !== 0; throw err; }
+	return (await r.json()).message;
+}
+// uploads: {argName: Blob}. Sent immediately when online, otherwise queued and replayed.
+async function send(method, args, uploads) {
+	try {
+		if (!navigator.onLine) throw new Error("offline");
+		for (const [k, b] of Object.entries(uploads || {})) args[k] = await upload(b, k + ".jpg");
+		return await call(method, args);
+	} catch (e) {
+		if (e.server) { alert(e.message); throw e; }
+		await qAdd({ method, args, uploads: uploads || {} }); await count(); alert("Saved offline. It will sync when you are online."); return null;
+	}
+}
+async function flush() {
+	if (!navigator.onLine) return;
+	for (const { k, v } of await qAll()) {
+		try { for (const [n, b] of Object.entries(v.uploads)) v.args[n] = await upload(b, n + ".jpg"); await call(v.method, v.args); await qDel(k); }
+		catch (e) { if (e.server) await qDel(k); else break; }
+	}
+	await count(); load();
+}
+async function count() { $("#q").textContent = (await qAll()).length; }
+
+// ---------- GPS (foreground only; browsers cannot track in background) ----------
+let pos = null, active = null;
+function watch() { if (navigator.geolocation) navigator.geolocation.watchPosition((p) => (pos = p), () => {}, { enableHighAccuracy: true, maximumAge: 30000 }); }
+setInterval(() => { if (active && pos) send("transport_management.api.post_location", { trip_plan: active, lat: pos.coords.latitude, lng: pos.coords.longitude, speed: (pos.coords.speed || 0) * 3.6, accuracy: pos.coords.accuracy, timestamp: new Date(pos.timestamp).toISOString().slice(0, 19).replace("T", " ") }).catch(() => {}); }, 60000);
+const ll = () => (pos ? { lat: pos.coords.latitude, lng: pos.coords.longitude } : {});
+const photo = (id) => ($(id) && $(id).files[0]) || null;
+
+// ---------- UI ----------
+let trips = [], cats = [];
+async function load() {
+	try { trips = await call("transport_management.api.my_trips", {}); cats = await call("transport_management.api.expense_categories", {}); } catch (e) { if (!navigator.onLine) return; }
+	active = (trips.find((t) => ["Started", "In Transit", "Arrived"].includes(t.workflow_state)) || {}).name || null;
+	$("#trips").innerHTML = trips.length ? trips.map((t) => `<div class="card"><b>${esc(t.name)}</b> <span class="pill">${esc(t.workflow_state)}</span>
+		<div>${esc(t.from_location)} &rarr; ${esc(t.to_location)}</div><div class="mut">${esc(t.vehicle)} &middot; ${esc(t.planned_start)}</div>
+		<button class="p" onclick="open_trip('${esc(t.name)}')">Open</button></div>`).join("") : '<div class="card mut">No assigned trips.</div>';
+}
+function open_trip(name) {
+	const t = trips.find((x) => x.name === name), s = t.workflow_state;
+	const a = (label, fn, cls) => `<button class="${cls || ""}" onclick="${fn}('${esc(name)}')">${label}</button>`;
+	$("#panel").innerHTML = `<div class="card"><b>${esc(name)}</b> <span class="pill">${esc(s)}</span>
+		${(t.stops || []).map((p) => `<div>${p.sequence}. ${esc(p.location)} <span class="pill">${esc(p.status)}</span>
+			${["Pending", "Arrived"].includes(p.status) && active === name ? `<button onclick="stop('${esc(name)}','${esc(p.name)}','${p.status === "Pending" ? "Arrived" : "Completed"}')">${p.status === "Pending" ? "Arrived" : "Done"}</button>` : ""}</div>`).join("")}
+		<hr>
+		${s === "Approved" ? a("Start trip", "start_form", "p") : ""}
+		${s === "Started" ? a("In transit", "act_transit") : ""}
+		${["Started", "In Transit"].includes(s) ? a("Arrived", "act_arrive", "p") : ""}
+		${s === "Arrived" ? a("Complete trip", "complete_form", "p") : ""}
+		${["Started", "In Transit", "Arrived"].includes(s) ? a("Expense", "expense_form") + a("Report issue", "issue_form") + a("Proof of delivery", "pod_form") : ""}
+		<div id="form"></div></div>`;
+}
+const setForm = (h) => ($("#form").innerHTML = h);
+const act = async (t, action, extra) => { await send("transport_management.api.trip_action", { trip: t, action, ...ll(), ...(extra || {}) }); await load(); open_trip(t); };
+window.start_form = (t) => setForm(`<label>Start odometer</label><input id="odo" type="number" inputmode="decimal"><label>Number plate photo</label><input id="ph" type="file" accept="image/*" capture="environment"><button class="p" onclick="do_start('${t}')">Start</button>`);
+window.do_start = async (t) => {
+	const tr = trips.find((x) => x.name === t);
+	if (tr.rules.plate_photo && !photo("#ph")) return alert("Number plate photo is required");
+	if (photo("#ph")) await send("transport_management.api.add_inspection", { trip: t, inspection_type: "Number Plate", odometer: $("#odo").value, ...ll() }, { photo: photo("#ph") });
+	await act(t, "start", { odometer: $("#odo").value });
+};
+window.act_transit = (t) => act(t, "in_transit");
+window.act_arrive = (t) => act(t, "arrive");
+window.complete_form = (t) => setForm(`<label>End odometer</label><input id="odo" type="number" inputmode="decimal"><label>Delay reason (if late)</label><input id="dr"><button class="p" onclick="act('${t}','complete',{odometer:$('#odo').value,delay_reason:$('#dr').value})">Complete</button>`);
+window.stop = async (t, s, st) => { await send("transport_management.api.update_stop", { trip: t, stop: s, status: st, ...ll() }); await load(); open_trip(t); };
+window.expense_form = (t) => setForm(`<label>Category</label><select id="cat">${cats.map((c) => `<option>${esc(c.name)}</option>`).join("")}</select><label>Amount</label><input id="amt" type="number" inputmode="decimal"><label>Litres (fuel)</label><input id="lit" type="number" inputmode="decimal"><label>Odometer (fuel)</label><input id="eodo" type="number"><label>Receipt</label><input id="rc" type="file" accept="image/*" capture="environment"><button class="p" onclick="do_exp('${t}')">Submit expense</button>`);
+window.do_exp = async (t) => { const up = photo("#rc") ? { receipt: photo("#rc") } : {}; await send("transport_management.api.add_expense", { trip: t, expense_category: $("#cat").value, amount: $("#amt").value, litres: $("#lit").value, odometer: $("#eodo").value }, up); setForm("Saved."); };
+window.issue_form = (t) => setForm(`<label>Type</label><select id="it">${["Breakdown", "Accident", "Delay", "Route Change", "Other"].map((x) => `<option>${x}</option>`).join("")}</select><label>Details</label><textarea id="id"></textarea><input id="ip" type="file" accept="image/*" capture="environment"><button class="p" onclick="do_issue('${t}')">Report</button>`);
+window.do_issue = async (t) => { await send("transport_management.api.report_issue", { trip: t, issue_type: $("#it").value, description: $("#id").value || $("#it").value, ...ll() }, photo("#ip") ? { photo: photo("#ip") } : {}); setForm("Reported."); };
+let drawing = false;
+window.pod_form = (t) => { setForm(`<label>Receiver name</label><input id="rn"><label>OTP (from receiver)</label><input id="otp" inputmode="numeric"><label>Signature</label><canvas id="sig"></canvas><button onclick="clr()">Clear</button><label>Photo</label><input id="pp" type="file" accept="image/*" capture="environment"><button class="p" onclick="do_pod('${t}')">Submit proof</button>`);
+	const c = $("#sig"); c.width = c.offsetWidth; c.height = 120; const x = c.getContext("2d"); x.lineWidth = 2; x.strokeStyle = "#000";
+	const p = (e) => { const r = c.getBoundingClientRect(); return [e.clientX - r.left, e.clientY - r.top]; };
+	c.onpointerdown = (e) => { drawing = true; x.beginPath(); x.moveTo(...p(e)); }; c.onpointermove = (e) => { if (drawing) { x.lineTo(...p(e)); x.stroke(); } }; c.onpointerup = () => (drawing = false); };
+window.clr = () => { const c = $("#sig"); c.getContext("2d").clearRect(0, 0, c.width, c.height); };
+window.do_pod = async (t) => {
+	if (!$("#rn").value) return alert("Receiver name is required");
+	const blob = await new Promise((r) => $("#sig").toBlob(r, "image/png"));
+	const up = { signature: blob }; if (photo("#pp")) up.photo = photo("#pp");
+	await send("transport_management.api.submit_pod", { trip: t, receiver_name: $("#rn").value, otp: $("#otp").value }, up); setForm("Proof saved.");
+};
+function net() { $("#net").textContent = navigator.onLine ? "online" : "offline"; }
+addEventListener("online", () => { net(); flush(); }); addEventListener("offline", net);
+if ("serviceWorker" in navigator) navigator.serviceWorker.register("/driver/sw.js");
+idb.then(async () => { net(); watch(); await count(); await flush(); load(); });
+</script>
+</body>
+</html>

@@ -1,0 +1,361 @@
+{
+ "actions": [],
+ "creation": "2026-11-05 10:00:00.000000",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "feat",
+  "enable_live_map",
+  "enable_dispatch_board",
+  "enable_suggestions",
+  "enable_public_tracking",
+  "enable_pod",
+  "cb_f1",
+  "enable_service_areas",
+  "enable_rate_cards",
+  "enable_issue_reporting",
+  "enable_fuel_logs",
+  "enable_geofence_alerts",
+  "enable_driver_ratings",
+  "auto_assign",
+  "rules",
+  "reminder_days",
+  "document_escalation_role",
+  "block_assignment_on_expired_documents",
+  "require_driver_attendance",
+  "attendance_source",
+  "cb_r1",
+  "stale_location_minutes",
+  "location_retention_days",
+  "delay_threshold_minutes",
+  "idle_alert_minutes",
+  "fuel_anomaly_percent",
+  "check_duplicate_receipts",
+  "acct",
+  "company",
+  "default_cost_center",
+  "advance_account",
+  "cash_account",
+  "cb_a1",
+  "driver_payable_account",
+  "advance_mode_of_payment",
+  "freight_item",
+  "notif",
+  "notify_email",
+  "notify_sms",
+  "notify_whatsapp",
+  "cb_n1",
+  "dispatcher_email",
+  "integ",
+  "webhook_note"
+ ],
+ "fields": [
+  {
+   "fieldname": "feat",
+   "fieldtype": "Section Break",
+   "label": "Optional features (Fleetbase extras)"
+  },
+  {
+   "fieldname": "enable_live_map",
+   "fieldtype": "Check",
+   "label": "E1 Live dispatch map",
+   "default": 1
+  },
+  {
+   "fieldname": "enable_dispatch_board",
+   "fieldtype": "Check",
+   "label": "E2 Dispatch board",
+   "default": 1
+  },
+  {
+   "fieldname": "enable_suggestions",
+   "fieldtype": "Check",
+   "label": "E3 Smart assignment suggestions",
+   "default": 1
+  },
+  {
+   "fieldname": "enable_public_tracking",
+   "fieldtype": "Check",
+   "label": "E4 Public tracking link",
+   "default": 1
+  },
+  {
+   "fieldname": "enable_pod",
+   "fieldtype": "Check",
+   "label": "E5 Proof of delivery",
+   "default": 1
+  },
+  {
+   "fieldname": "cb_f1",
+   "fieldtype": "Column Break",
+   "label": ""
+  },
+  {
+   "fieldname": "enable_service_areas",
+   "fieldtype": "Check",
+   "label": "E6 Service areas and zones"
+  },
+  {
+   "fieldname": "enable_rate_cards",
+   "fieldtype": "Check",
+   "label": "E7 Rate cards and quotes",
+   "default": 1
+  },
+  {
+   "fieldname": "enable_issue_reporting",
+   "fieldtype": "Check",
+   "label": "E10 Driver issue reporting",
+   "default": 1
+  },
+  {
+   "fieldname": "enable_fuel_logs",
+   "fieldtype": "Check",
+   "label": "E11 Fuel and mileage tracking",
+   "default": 1
+  },
+  {
+   "fieldname": "enable_geofence_alerts",
+   "fieldtype": "Check",
+   "label": "E17 Geofence alerts"
+  },
+  {
+   "fieldname": "enable_driver_ratings",
+   "fieldtype": "Check",
+   "label": "E19 Driver earnings and ratings"
+  },
+  {
+   "fieldname": "auto_assign",
+   "fieldtype": "Check",
+   "label": "Auto Assign",
+   "description": "Not supported: suggestions are advisory only. Left disabled by design.",
+   "read_only": 1
+  },
+  {
+   "fieldname": "rules",
+   "fieldtype": "Section Break",
+   "label": "Business rules"
+  },
+  {
+   "fieldname": "reminder_days",
+   "fieldtype": "Data",
+   "label": "Reminder Days",
+   "default": "30,15,7,1",
+   "description": "Days before expiry to send reminders"
+  },
+  {
+   "fieldname": "document_escalation_role",
+   "fieldtype": "Link",
+   "label": "Document Escalation Role",
+   "options": "Role",
+   "default": "Transport Manager"
+  },
+  {
+   "fieldname": "block_assignment_on_expired_documents",
+   "fieldtype": "Check",
+   "label": "Block Assignment On Expired Documents",
+   "default": 1
+  },
+  {
+   "fieldname": "require_driver_attendance",
+   "fieldtype": "Check",
+   "label": "Require Driver Attendance",
+   "default": 1,
+   "description": "Driver must have HRMS attendance or check-in on the trip date (today or earlier)"
+  },
+  {
+   "fieldname": "attendance_source",
+   "fieldtype": "Select",
+   "label": "Attendance Source",
+   "options": "HRMS\nManual\nNone",
+   "default": "HRMS"
+  },
+  {
+   "fieldname": "cb_r1",
+   "fieldtype": "Column Break",
+   "label": ""
+  },
+  {
+   "fieldname": "stale_location_minutes",
+   "fieldtype": "Int",
+   "label": "Stale Location Minutes",
+   "default": 15,
+   "description": "Location older than this is shown as stale, never live"
+  },
+  {
+   "fieldname": "location_retention_days",
+   "fieldtype": "Int",
+   "label": "Location Retention Days",
+   "default": 90
+  },
+  {
+   "fieldname": "delay_threshold_minutes",
+   "fieldtype": "Int",
+   "label": "Delay Threshold Minutes",
+   "default": 30
+  },
+  {
+   "fieldname": "idle_alert_minutes",
+   "fieldtype": "Int",
+   "label": "Idle Alert Minutes",
+   "default": 60
+  },
+  {
+   "fieldname": "fuel_anomaly_percent",
+   "fieldtype": "Percent",
+   "label": "Fuel Anomaly Percent",
+   "default": 25,
+   "description": "Flag fills whose km/l deviates from the vehicle average by more than this"
+  },
+  {
+   "fieldname": "check_duplicate_receipts",
+   "fieldtype": "Check",
+   "label": "Check Duplicate Receipts",
+   "default": 1
+  },
+  {
+   "fieldname": "acct",
+   "fieldtype": "Section Break",
+   "label": "Accounting"
+  },
+  {
+   "fieldname": "company",
+   "fieldtype": "Link",
+   "label": "Company",
+   "options": "Company"
+  },
+  {
+   "fieldname": "default_cost_center",
+   "fieldtype": "Link",
+   "label": "Default Cost Center",
+   "options": "Cost Center"
+  },
+  {
+   "fieldname": "advance_account",
+   "fieldtype": "Link",
+   "label": "Advance Account",
+   "options": "Account",
+   "description": "Driver advance (receivable) account"
+  },
+  {
+   "fieldname": "cash_account",
+   "fieldtype": "Link",
+   "label": "Cash Account",
+   "options": "Account",
+   "description": "Cash / bank account that funds advances"
+  },
+  {
+   "fieldname": "cb_a1",
+   "fieldtype": "Column Break",
+   "label": ""
+  },
+  {
+   "fieldname": "driver_payable_account",
+   "fieldtype": "Link",
+   "label": "Driver Payable Account",
+   "options": "Account"
+  },
+  {
+   "fieldname": "advance_mode_of_payment",
+   "fieldtype": "Link",
+   "label": "Advance Mode Of Payment",
+   "options": "Mode of Payment"
+  },
+  {
+   "fieldname": "freight_item",
+   "fieldtype": "Link",
+   "label": "Freight Item",
+   "options": "Item",
+   "description": "Item used on the Sales Order created from a quote"
+  },
+  {
+   "fieldname": "notif",
+   "fieldtype": "Section Break",
+   "label": "Notification channels"
+  },
+  {
+   "fieldname": "notify_email",
+   "fieldtype": "Check",
+   "label": "Notify Email",
+   "default": 1
+  },
+  {
+   "fieldname": "notify_sms",
+   "fieldtype": "Check",
+   "label": "Notify Sms"
+  },
+  {
+   "fieldname": "notify_whatsapp",
+   "fieldtype": "Check",
+   "label": "Notify Whatsapp"
+  },
+  {
+   "fieldname": "cb_n1",
+   "fieldtype": "Column Break",
+   "label": ""
+  },
+  {
+   "fieldname": "dispatcher_email",
+   "fieldtype": "Data",
+   "label": "Dispatcher Email",
+   "description": "Optional extra address for dispatch alerts"
+  },
+  {
+   "fieldname": "integ",
+   "fieldtype": "Section Break",
+   "label": "Integrations"
+  },
+  {
+   "fieldname": "webhook_note",
+   "fieldtype": "HTML",
+   "label": "Webhook Note",
+   "options": "Use the standard <b>Webhook</b> doctype on <b>Trip Plan</b> / <b>Vehicle Booking Request</b> for outbound events, and a user API key with role <b>Transport Integrator</b> for inbound bookings."
+  }
+ ],
+ "modified": "2026-11-05 10:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Transport Management",
+ "name": "Transport Settings",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "role": "Transport Manager",
+   "permlevel": 0,
+   "read": 1,
+   "write": 1,
+   "export": 1,
+   "report": 1,
+   "email": 1
+  },
+  {
+   "role": "System Manager",
+   "permlevel": 0,
+   "read": 1,
+   "write": 1,
+   "export": 1,
+   "report": 1,
+   "email": 1
+  },
+  {
+   "role": "Accounts User",
+   "permlevel": 0,
+   "read": 1,
+   "email": 1
+  },
+  {
+   "role": "Transport Coordinator",
+   "permlevel": 0,
+   "read": 1,
+   "email": 1
+  },
+  {
+   "role": "Transport Dispatcher",
+   "permlevel": 0,
+   "read": 1,
+   "email": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "issingle": 1
+}

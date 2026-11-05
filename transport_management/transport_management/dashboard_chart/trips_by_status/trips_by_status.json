@@ -1,0 +1,21 @@
+{
+ "creation": "2026-11-05 10:00:00.000000",
+ "modified": "2026-11-05 10:00:00.000000",
+ "modified_by": "Administrator",
+ "owner": "Administrator",
+ "module": "Transport Management",
+ "doctype": "Dashboard Chart",
+ "name": "Trips by Status",
+ "chart_name": "Trips by Status",
+ "chart_type": "Group By",
+ "document_type": "Trip Plan",
+ "group_by_type": "Count",
+ "group_by_based_on": "workflow_state",
+ "type": "Bar",
+ "filters_json": "[]",
+ "is_public": 1,
+ "is_standard": 1,
+ "number_of_groups": 0,
+ "timeseries": 0,
+ "docstatus": 0
+}

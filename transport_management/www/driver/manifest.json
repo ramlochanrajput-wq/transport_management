@@ -1,0 +1,10 @@
+{
+	"name": "Driver App",
+	"short_name": "Driver",
+	"start_url": "/driver/app",
+	"scope": "/driver/",
+	"display": "standalone",
+	"background_color": "#ffffff",
+	"theme_color": "#2563eb",
+	"icons": [{ "src": "/assets/transport_management/images/transport.svg", "sizes": "any", "type": "image/svg+xml" }]
+}

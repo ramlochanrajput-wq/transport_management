@@ -1,0 +1,28 @@
+{
+ "doctype": "Page",
+ "name": "dispatch-board",
+ "page_name": "dispatch-board",
+ "title": "Dispatch Board",
+ "module": "Transport Management",
+ "standard": "Yes",
+ "system_page": 0,
+ "icon": "",
+ "roles": [
+  {
+   "role": "Transport Manager"
+  },
+  {
+   "role": "Transport Coordinator"
+  },
+  {
+   "role": "Transport Dispatcher"
+  },
+  {
+   "role": "System Manager"
+  }
+ ],
+ "creation": "2026-11-05 10:00:00.000000",
+ "modified": "2026-11-05 10:00:00.000000",
+ "modified_by": "Administrator",
+ "owner": "Administrator"
+}

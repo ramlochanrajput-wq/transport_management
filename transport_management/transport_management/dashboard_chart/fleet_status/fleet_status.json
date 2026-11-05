@@ -1,0 +1,21 @@
+{
+ "creation": "2026-11-05 10:00:00.000000",
+ "modified": "2026-11-05 10:00:00.000000",
+ "modified_by": "Administrator",
+ "owner": "Administrator",
+ "module": "Transport Management",
+ "doctype": "Dashboard Chart",
+ "name": "Fleet Status",
+ "chart_name": "Fleet Status",
+ "chart_type": "Group By",
+ "document_type": "Vehicle",
+ "group_by_type": "Count",
+ "group_by_based_on": "tm_status",
+ "type": "Donut",
+ "filters_json": "[]",
+ "is_public": 1,
+ "is_standard": 1,
+ "number_of_groups": 0,
+ "timeseries": 0,
+ "docstatus": 0
+}

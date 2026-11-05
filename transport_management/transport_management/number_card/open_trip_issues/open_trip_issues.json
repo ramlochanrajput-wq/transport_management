@@ -1,0 +1,18 @@
+{
+ "creation": "2026-11-05 10:00:00.000000",
+ "modified": "2026-11-05 10:00:00.000000",
+ "modified_by": "Administrator",
+ "owner": "Administrator",
+ "module": "Transport Management",
+ "doctype": "Number Card",
+ "name": "Open Trip Issues",
+ "label": "Open Trip Issues",
+ "document_type": "Trip Issue",
+ "function": "Count",
+ "filters_json": "[[\"Trip Issue\", \"status\", \"!=\", \"Resolved\"]]",
+ "is_public": 1,
+ "is_standard": 1,
+ "show_percentage_stats": 0,
+ "type": "Document Type",
+ "docstatus": 0
+}

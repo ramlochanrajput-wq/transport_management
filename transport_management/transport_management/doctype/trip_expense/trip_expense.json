@@ -1,0 +1,274 @@
+{
+ "actions": [],
+ "creation": "2026-11-05 10:00:00.000000",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "trip_plan",
+  "vehicle",
+  "driver",
+  "cb1",
+  "workflow_state",
+  "expense_date",
+  "expense_category",
+  "amount",
+  "rcpt",
+  "receipt",
+  "receipt_hash",
+  "description",
+  "cb2",
+  "over_limit",
+  "limit_remark",
+  "needs_manager",
+  "fuel",
+  "is_fuel",
+  "litres",
+  "odometer",
+  "fuel_log",
+  "st",
+  "settlement",
+  "amended_from"
+ ],
+ "fields": [
+  {
+   "fieldname": "trip_plan",
+   "fieldtype": "Link",
+   "label": "Trip Plan",
+   "options": "Trip Plan",
+   "reqd": 1,
+   "in_standard_filter": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "vehicle",
+   "fieldtype": "Link",
+   "label": "Vehicle",
+   "options": "Vehicle",
+   "fetch_from": "trip_plan.vehicle",
+   "read_only": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "driver",
+   "fieldtype": "Link",
+   "label": "Driver",
+   "options": "Driver",
+   "fetch_from": "trip_plan.driver",
+   "read_only": 1
+  },
+  {
+   "fieldname": "cb1",
+   "fieldtype": "Column Break",
+   "label": ""
+  },
+  {
+   "fieldname": "workflow_state",
+   "fieldtype": "Link",
+   "label": "Workflow State",
+   "options": "Workflow State",
+   "read_only": 1,
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "no_copy": 1
+  },
+  {
+   "fieldname": "expense_date",
+   "fieldtype": "Date",
+   "label": "Expense Date",
+   "default": "Today",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "expense_category",
+   "fieldtype": "Link",
+   "label": "Expense Category",
+   "options": "Expense Category",
+   "reqd": 1,
+   "in_standard_filter": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "amount",
+   "fieldtype": "Currency",
+   "label": "Amount",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "rcpt",
+   "fieldtype": "Section Break",
+   "label": "Receipt"
+  },
+  {
+   "fieldname": "receipt",
+   "fieldtype": "Attach Image",
+   "label": "Receipt"
+  },
+  {
+   "fieldname": "receipt_hash",
+   "fieldtype": "Data",
+   "label": "Receipt Hash",
+   "read_only": 1,
+   "hidden": 1,
+   "no_copy": 1,
+   "search_index": 1
+  },
+  {
+   "fieldname": "description",
+   "fieldtype": "Small Text",
+   "label": "Description"
+  },
+  {
+   "fieldname": "cb2",
+   "fieldtype": "Column Break",
+   "label": ""
+  },
+  {
+   "fieldname": "over_limit",
+   "fieldtype": "Check",
+   "label": "Over Limit",
+   "read_only": 1
+  },
+  {
+   "fieldname": "limit_remark",
+   "fieldtype": "Small Text",
+   "label": "Limit Remark",
+   "read_only": 1
+  },
+  {
+   "fieldname": "needs_manager",
+   "fieldtype": "Check",
+   "label": "Needs Manager",
+   "read_only": 1,
+   "hidden": 1
+  },
+  {
+   "fieldname": "fuel",
+   "fieldtype": "Section Break",
+   "label": "Fuel details",
+   "depends_on": "eval:doc.is_fuel"
+  },
+  {
+   "fieldname": "is_fuel",
+   "fieldtype": "Check",
+   "label": "Is Fuel",
+   "fetch_from": "expense_category.is_fuel",
+   "read_only": 1
+  },
+  {
+   "fieldname": "litres",
+   "fieldtype": "Float",
+   "label": "Litres"
+  },
+  {
+   "fieldname": "odometer",
+   "fieldtype": "Float",
+   "label": "Odometer"
+  },
+  {
+   "fieldname": "fuel_log",
+   "fieldtype": "Link",
+   "label": "Fuel Log",
+   "options": "Fuel Log",
+   "read_only": 1,
+   "no_copy": 1,
+   "allow_on_submit": 1
+  },
+  {
+   "fieldname": "st",
+   "fieldtype": "Section Break",
+   "label": "Settlement"
+  },
+  {
+   "fieldname": "settlement",
+   "fieldtype": "Link",
+   "label": "Settlement",
+   "options": "Trip Settlement",
+   "read_only": 1,
+   "no_copy": 1,
+   "allow_on_submit": 1
+  },
+  {
+   "fieldname": "amended_from",
+   "fieldtype": "Link",
+   "label": "Amended From",
+   "options": "Trip Expense",
+   "hidden": 1,
+   "read_only": 1,
+   "no_copy": 1,
+   "print_hide": 1
+  }
+ ],
+ "modified": "2026-11-05 10:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Transport Management",
+ "name": "Trip Expense",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "role": "Transport Manager",
+   "permlevel": 0,
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "delete": 1,
+   "export": 1,
+   "print": 1,
+   "import": 1,
+   "share": 1,
+   "submit": 1,
+   "cancel": 1,
+   "amend": 1,
+   "report": 1,
+   "email": 1
+  },
+  {
+   "role": "Transport Coordinator",
+   "permlevel": 0,
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "submit": 1,
+   "export": 1,
+   "print": 1,
+   "report": 1,
+   "email": 1
+  },
+  {
+   "role": "Accounts User",
+   "permlevel": 0,
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "delete": 1,
+   "submit": 1,
+   "cancel": 1,
+   "amend": 1,
+   "export": 1,
+   "print": 1,
+   "report": 1,
+   "email": 1
+  },
+  {
+   "role": "Transport Driver",
+   "permlevel": 0,
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "email": 1
+  },
+  {
+   "role": "Transport Dispatcher",
+   "permlevel": 0,
+   "read": 1,
+   "email": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "autoname": "format:EXP-{YYYY}-{#####}",
+ "is_submittable": 1,
+ "track_changes": 1
+}

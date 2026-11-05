@@ -1,0 +1,162 @@
+{
+ "actions": [],
+ "creation": "2026-11-05 10:00:00.000000",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "trip_type_name",
+  "description",
+  "evidence",
+  "requires_start_odometer",
+  "requires_end_odometer",
+  "requires_number_plate_photo",
+  "requires_stops",
+  "cb1",
+  "requires_pod",
+  "requires_gps",
+  "requires_inspection_photos",
+  "limits",
+  "advance_limit",
+  "expense_limit",
+  "cb2",
+  "approval_limit"
+ ],
+ "fields": [
+  {
+   "fieldname": "trip_type_name",
+   "fieldtype": "Data",
+   "label": "Trip Type Name",
+   "reqd": 1,
+   "unique": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "description",
+   "fieldtype": "Small Text",
+   "label": "Description"
+  },
+  {
+   "fieldname": "evidence",
+   "fieldtype": "Section Break",
+   "label": "Required evidence"
+  },
+  {
+   "fieldname": "requires_start_odometer",
+   "fieldtype": "Check",
+   "label": "Requires Start Odometer",
+   "default": 1
+  },
+  {
+   "fieldname": "requires_end_odometer",
+   "fieldtype": "Check",
+   "label": "Requires End Odometer",
+   "default": 1
+  },
+  {
+   "fieldname": "requires_number_plate_photo",
+   "fieldtype": "Check",
+   "label": "Requires Number Plate Photo"
+  },
+  {
+   "fieldname": "requires_stops",
+   "fieldtype": "Check",
+   "label": "Requires Stops"
+  },
+  {
+   "fieldname": "cb1",
+   "fieldtype": "Column Break",
+   "label": ""
+  },
+  {
+   "fieldname": "requires_pod",
+   "fieldtype": "Check",
+   "label": "Requires Proof of Delivery"
+  },
+  {
+   "fieldname": "requires_gps",
+   "fieldtype": "Check",
+   "label": "Requires Gps"
+  },
+  {
+   "fieldname": "requires_inspection_photos",
+   "fieldtype": "Check",
+   "label": "Requires Inspection Photos"
+  },
+  {
+   "fieldname": "limits",
+   "fieldtype": "Section Break",
+   "label": "Monetary limits"
+  },
+  {
+   "fieldname": "advance_limit",
+   "fieldtype": "Currency",
+   "label": "Advance Limit"
+  },
+  {
+   "fieldname": "expense_limit",
+   "fieldtype": "Currency",
+   "label": "Expense Limit",
+   "description": "Total approved expenses per trip before manager approval is forced"
+  },
+  {
+   "fieldname": "cb2",
+   "fieldtype": "Column Break",
+   "label": ""
+  },
+  {
+   "fieldname": "approval_limit",
+   "fieldtype": "Currency",
+   "label": "Approval Limit",
+   "description": "Coordinator may approve single expenses up to this amount"
+  }
+ ],
+ "modified": "2026-11-05 10:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Transport Management",
+ "name": "Trip Type",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "role": "Transport Manager",
+   "permlevel": 0,
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "delete": 1,
+   "export": 1,
+   "print": 1,
+   "import": 1,
+   "share": 1,
+   "report": 1,
+   "email": 1
+  },
+  {
+   "role": "Transport Coordinator",
+   "permlevel": 0,
+   "read": 1,
+   "email": 1
+  },
+  {
+   "role": "Transport Dispatcher",
+   "permlevel": 0,
+   "read": 1,
+   "email": 1
+  },
+  {
+   "role": "Transport Driver",
+   "permlevel": 0,
+   "read": 1,
+   "email": 1
+  },
+  {
+   "role": "Accounts User",
+   "permlevel": 0,
+   "read": 1,
+   "email": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "autoname": "field:trip_type_name"
+}

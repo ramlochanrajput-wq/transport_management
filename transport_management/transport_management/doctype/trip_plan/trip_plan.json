@@ -1,0 +1,504 @@
+{
+ "actions": [],
+ "creation": "2026-11-05 10:00:00.000000",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "booking",
+  "customer",
+  "fleet",
+  "trip_type",
+  "cb1",
+  "workflow_state",
+  "status_note",
+  "service_area",
+  "out_of_zone",
+  "tracking_enabled",
+  "tracking_token",
+  "assignment",
+  "vehicle",
+  "vehicle_type",
+  "driver",
+  "driver_name",
+  "cb2",
+  "planned_start",
+  "planned_end",
+  "load_kg",
+  "override_reason",
+  "override_done",
+  "route",
+  "from_location",
+  "cb3",
+  "to_location",
+  "stops_sec",
+  "stops",
+  "exec",
+  "actual_start",
+  "start_odometer",
+  "delay_minutes",
+  "delay_reason",
+  "cb4",
+  "actual_end",
+  "end_odometer",
+  "distance_km",
+  "hold_reason",
+  "cancel_reason",
+  "pod_sec",
+  "proofs",
+  "loc",
+  "last_latitude",
+  "last_longitude",
+  "cb5",
+  "last_seen",
+  "money",
+  "freight_amount",
+  "sales_order",
+  "total_advance",
+  "cb6",
+  "total_expense",
+  "profit",
+  "settlement",
+  "amended_from"
+ ],
+ "fields": [
+  {
+   "fieldname": "booking",
+   "fieldtype": "Link",
+   "label": "Booking",
+   "options": "Vehicle Booking Request",
+   "in_standard_filter": 1,
+   "no_copy": 1
+  },
+  {
+   "fieldname": "customer",
+   "fieldtype": "Link",
+   "label": "Customer",
+   "options": "Customer",
+   "fetch_from": "booking.customer",
+   "in_standard_filter": 1
+  },
+  {
+   "fieldname": "fleet",
+   "fieldtype": "Link",
+   "label": "Fleet",
+   "options": "Transport Fleet",
+   "in_standard_filter": 1
+  },
+  {
+   "fieldname": "trip_type",
+   "fieldtype": "Link",
+   "label": "Trip Type",
+   "options": "Trip Type",
+   "reqd": 1,
+   "in_standard_filter": 1
+  },
+  {
+   "fieldname": "cb1",
+   "fieldtype": "Column Break",
+   "label": ""
+  },
+  {
+   "fieldname": "workflow_state",
+   "fieldtype": "Link",
+   "label": "Workflow State",
+   "options": "Workflow State",
+   "read_only": 1,
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "no_copy": 1
+  },
+  {
+   "fieldname": "status_note",
+   "fieldtype": "Data",
+   "label": "Status Note",
+   "read_only": 1,
+   "hidden": 1
+  },
+  {
+   "fieldname": "service_area",
+   "fieldtype": "Link",
+   "label": "Service Area",
+   "options": "Service Area"
+  },
+  {
+   "fieldname": "out_of_zone",
+   "fieldtype": "Check",
+   "label": "Out Of Zone",
+   "read_only": 1
+  },
+  {
+   "fieldname": "tracking_enabled",
+   "fieldtype": "Check",
+   "label": "Tracking Enabled",
+   "default": 1
+  },
+  {
+   "fieldname": "tracking_token",
+   "fieldtype": "Data",
+   "label": "Tracking Token",
+   "read_only": 1,
+   "hidden": 1,
+   "no_copy": 1,
+   "search_index": 1
+  },
+  {
+   "fieldname": "assignment",
+   "fieldtype": "Section Break",
+   "label": "Assignment"
+  },
+  {
+   "fieldname": "vehicle",
+   "fieldtype": "Link",
+   "label": "Vehicle",
+   "options": "Vehicle",
+   "reqd": 1,
+   "in_list_view": 1,
+   "in_standard_filter": 1
+  },
+  {
+   "fieldname": "vehicle_type",
+   "fieldtype": "Data",
+   "label": "Vehicle Type",
+   "fetch_from": "vehicle.tm_vehicle_type",
+   "read_only": 1
+  },
+  {
+   "fieldname": "driver",
+   "fieldtype": "Link",
+   "label": "Driver",
+   "options": "Driver",
+   "reqd": 1,
+   "in_list_view": 1,
+   "in_standard_filter": 1
+  },
+  {
+   "fieldname": "driver_name",
+   "fieldtype": "Data",
+   "label": "Driver Name",
+   "fetch_from": "driver.full_name",
+   "read_only": 1
+  },
+  {
+   "fieldname": "cb2",
+   "fieldtype": "Column Break",
+   "label": ""
+  },
+  {
+   "fieldname": "planned_start",
+   "fieldtype": "Datetime",
+   "label": "Planned Start",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "planned_end",
+   "fieldtype": "Datetime",
+   "label": "Planned End",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "load_kg",
+   "fieldtype": "Float",
+   "label": "Load (kg)"
+  },
+  {
+   "fieldname": "override_reason",
+   "fieldtype": "Small Text",
+   "label": "Override Reason",
+   "description": "Required only when an authorised user overrides failed assignment checks"
+  },
+  {
+   "fieldname": "override_done",
+   "fieldtype": "Check",
+   "label": "Override Done",
+   "read_only": 1,
+   "hidden": 1,
+   "no_copy": 1
+  },
+  {
+   "fieldname": "route",
+   "fieldtype": "Section Break",
+   "label": "Route"
+  },
+  {
+   "fieldname": "from_location",
+   "fieldtype": "Data",
+   "label": "From Location",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "cb3",
+   "fieldtype": "Column Break",
+   "label": ""
+  },
+  {
+   "fieldname": "to_location",
+   "fieldtype": "Data",
+   "label": "To Location",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "stops_sec",
+   "fieldtype": "Section Break",
+   "label": "Stops (waypoints)"
+  },
+  {
+   "fieldname": "stops",
+   "fieldtype": "Table",
+   "label": "Stops",
+   "options": "Trip Stop"
+  },
+  {
+   "fieldname": "exec",
+   "fieldtype": "Section Break",
+   "label": "Execution"
+  },
+  {
+   "fieldname": "actual_start",
+   "fieldtype": "Datetime",
+   "label": "Actual Start",
+   "read_only": 1
+  },
+  {
+   "fieldname": "start_odometer",
+   "fieldtype": "Float",
+   "label": "Start Odometer"
+  },
+  {
+   "fieldname": "delay_minutes",
+   "fieldtype": "Int",
+   "label": "Delay Minutes",
+   "read_only": 1
+  },
+  {
+   "fieldname": "delay_reason",
+   "fieldtype": "Small Text",
+   "label": "Delay Reason"
+  },
+  {
+   "fieldname": "cb4",
+   "fieldtype": "Column Break",
+   "label": ""
+  },
+  {
+   "fieldname": "actual_end",
+   "fieldtype": "Datetime",
+   "label": "Actual End",
+   "read_only": 1
+  },
+  {
+   "fieldname": "end_odometer",
+   "fieldtype": "Float",
+   "label": "End Odometer"
+  },
+  {
+   "fieldname": "distance_km",
+   "fieldtype": "Float",
+   "label": "Distance Km",
+   "read_only": 1
+  },
+  {
+   "fieldname": "hold_reason",
+   "fieldtype": "Small Text",
+   "label": "Hold Reason",
+   "depends_on": "eval:doc.workflow_state=='On Hold'"
+  },
+  {
+   "fieldname": "cancel_reason",
+   "fieldtype": "Small Text",
+   "label": "Cancel Reason",
+   "depends_on": "eval:doc.workflow_state=='Cancelled'"
+  },
+  {
+   "fieldname": "pod_sec",
+   "fieldtype": "Section Break",
+   "label": "Proof of delivery",
+   "depends_on": "eval:doc.__islocal==0"
+  },
+  {
+   "fieldname": "proofs",
+   "fieldtype": "Table",
+   "label": "Proof of Delivery",
+   "options": "Trip Proof of Delivery"
+  },
+  {
+   "fieldname": "loc",
+   "fieldtype": "Section Break",
+   "label": "Last known location"
+  },
+  {
+   "fieldname": "last_latitude",
+   "fieldtype": "Float",
+   "label": "Last Latitude",
+   "read_only": 1,
+   "precision": "6"
+  },
+  {
+   "fieldname": "last_longitude",
+   "fieldtype": "Float",
+   "label": "Last Longitude",
+   "read_only": 1,
+   "precision": "6"
+  },
+  {
+   "fieldname": "cb5",
+   "fieldtype": "Column Break",
+   "label": ""
+  },
+  {
+   "fieldname": "last_seen",
+   "fieldtype": "Datetime",
+   "label": "Last Seen",
+   "read_only": 1
+  },
+  {
+   "fieldname": "money",
+   "fieldtype": "Section Break",
+   "label": "Financials"
+  },
+  {
+   "fieldname": "freight_amount",
+   "fieldtype": "Currency",
+   "label": "Freight Amount",
+   "permlevel": 1
+  },
+  {
+   "fieldname": "sales_order",
+   "fieldtype": "Link",
+   "label": "Sales Order",
+   "options": "Sales Order",
+   "permlevel": 1
+  },
+  {
+   "fieldname": "total_advance",
+   "fieldtype": "Currency",
+   "label": "Total Advance",
+   "read_only": 1,
+   "permlevel": 1
+  },
+  {
+   "fieldname": "cb6",
+   "fieldtype": "Column Break",
+   "label": ""
+  },
+  {
+   "fieldname": "total_expense",
+   "fieldtype": "Currency",
+   "label": "Total Expense",
+   "read_only": 1,
+   "permlevel": 1
+  },
+  {
+   "fieldname": "profit",
+   "fieldtype": "Currency",
+   "label": "Profit",
+   "read_only": 1,
+   "permlevel": 1
+  },
+  {
+   "fieldname": "settlement",
+   "fieldtype": "Link",
+   "label": "Settlement",
+   "options": "Trip Settlement",
+   "read_only": 1,
+   "no_copy": 1
+  },
+  {
+   "fieldname": "amended_from",
+   "fieldtype": "Link",
+   "label": "Amended From",
+   "options": "Trip Plan",
+   "hidden": 1,
+   "read_only": 1,
+   "no_copy": 1,
+   "print_hide": 1
+  }
+ ],
+ "modified": "2026-11-05 10:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Transport Management",
+ "name": "Trip Plan",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "role": "Transport Manager",
+   "permlevel": 0,
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "delete": 1,
+   "export": 1,
+   "print": 1,
+   "import": 1,
+   "share": 1,
+   "report": 1,
+   "email": 1
+  },
+  {
+   "role": "Transport Manager",
+   "permlevel": 1,
+   "read": 1,
+   "write": 1,
+   "email": 1
+  },
+  {
+   "role": "Accounts User",
+   "permlevel": 1,
+   "read": 1,
+   "email": 1
+  },
+  {
+   "role": "Accounts User",
+   "permlevel": 0,
+   "read": 1,
+   "export": 1,
+   "report": 1,
+   "email": 1
+  },
+  {
+   "role": "Transport Coordinator",
+   "permlevel": 0,
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "export": 1,
+   "print": 1,
+   "report": 1,
+   "email": 1
+  },
+  {
+   "role": "Transport Dispatcher",
+   "permlevel": 0,
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "export": 1,
+   "print": 1,
+   "report": 1,
+   "email": 1
+  },
+  {
+   "role": "Transport Driver",
+   "permlevel": 0,
+   "read": 1,
+   "write": 1,
+   "email": 1
+  },
+  {
+   "role": "Transport Integrator",
+   "permlevel": 0,
+   "read": 1,
+   "email": 1
+  }
+ ],
+ "sort_field": "creation",
+ "sort_order": "DESC",
+ "states": [],
+ "autoname": "format:TRP-{YYYY}-{#####}",
+ "track_changes": 1,
+ "title_field": "vehicle",
+ "search_fields": "vehicle,driver,customer"
+}

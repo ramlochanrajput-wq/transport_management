@@ -1,0 +1,18 @@
+{
+ "creation": "2026-11-05 10:00:00.000000",
+ "modified": "2026-11-05 10:00:00.000000",
+ "modified_by": "Administrator",
+ "owner": "Administrator",
+ "module": "Transport Management",
+ "doctype": "Number Card",
+ "name": "Vehicles Under Maintenance",
+ "label": "Under Maintenance",
+ "document_type": "Vehicle",
+ "function": "Count",
+ "filters_json": "[[\"Vehicle\", \"tm_status\", \"=\", \"Under Maintenance\"]]",
+ "is_public": 1,
+ "is_standard": 1,
+ "show_percentage_stats": 0,
+ "type": "Document Type",
+ "docstatus": 0
+}

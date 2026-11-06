@@ -5,6 +5,7 @@ Integrators authenticate with a normal Frappe API key/secret (Authorization: tok
 """
 
 import frappe
+from frappe.rate_limiter import rate_limit
 from frappe import _
 from frappe.utils import cint, flt, get_datetime, now_datetime
 
@@ -390,7 +391,7 @@ def submit_feedback(token, rating, comments=None):
 
 
 @frappe.whitelist(allow_guest=True)
-@frappe.rate_limit(limit=120, seconds=60)
+@rate_limit(limit=120, seconds=60)
 def public_tracking(token):
 	"""JSON twin of /track/<token> used by the page's auto-refresh. Read-only, no login."""
 	data = tracking.public_view(token)
